@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Fake News Detector</title>
+
+<body>
+    <div style="width: 200px; height: 40px">
+        <h3>Fake News Detector</h3>
+        <hr>
+        <button id="verify" onclick="print()" disabled="disabled">Verifying...</button>
+        <hr>
+        <p id="response"></p>
+        <p id="url"></p>
+    </div>
+    <script>
+        var azure_url = "http://localhost:7071/api/fake_news_deployment";
+
+        var current_url = "https://edition.cnn.com/2023/03/20/world/ipcc-synthesis-report-climate-intl/index.html";
+        document.getElementById("url").value = current_url;
+        var makeRequest = function () {
+            fetch(azure_url, {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    Accept: "application.json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify([{ url: current_url }]),
+            })
+                .then((response) => {
+                    
+                    return response.json();
+                })
+
+                .then((data) => {
+                    // responseData = undefined
+                    console.log(data);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
+        };
+        makeRequest();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "Fake news detector",
+  "version": "1.0.0",
+  "description": "detect fake news",
+  "manifest_version": 3,
+  "author": "Gokul H",
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Fake news detector"
+  },
+  "permissions": ["<all_urls>"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; script-src-elem 'self' 'unsafe-inline' https://unpkg.com/axios/dist/axios.min.js;"
+  },
+  "host_permissions": ["<all_urls>"]
+}

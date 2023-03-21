@@ -8,6 +8,26 @@ import joblib
 import json
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+from urllib.request import urlopen
+from urllib.error import HTTPError
+from bs4 import BeautifulSoup
+import validators
+
+
+def scraping(url):
+    try:
+        html = urlopen(url)
+        bs = BeautifulSoup(html, "html.parser")
+    except HTTPError as e:
+        return None
+    try:
+        allText = bs.find_all('p', {'class': {'paragraph', 'inline-placeholder'}})
+        final_output = ""
+        for text in allText:
+            final_output = final_output + text.get_text()
+    except AttributeError as e:
+        return None
+    return final_output
 
 
 def processing(sample_data):
@@ -40,7 +60,6 @@ def processing(sample_data):
     # created by fitting the tokenizer
     tokenizer.fit_on_texts(sample_df['all_info'])
     max_length = 40
-    vocab_size = 6000
     sequences_sample = tokenizer.texts_to_sequences(sample_df['all_info'])
     padded_sample = pad_sequences(sequences_sample, padding='post', maxlen=max_length)
 
@@ -52,24 +71,34 @@ def processing(sample_data):
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
-
+    logging.info(req)
     data = req.get_json()
-    data = json.loads(data)
-
+    data = json.loads(json.dumps(data))
     if data is not None:
 
         response = []
-        prediction = processing(data[0]['text'])
+        prediction = -1
+        # Collect url from json
+        url = data[0]['url']
+        # Validate the url
+        validation = validators.url(url)
+        if validation:
+            # Scrap the website
+            scraped_data = scraping(url)
+            if scraped_data:
+                # Process the data
+                prediction = processing(scraped_data)
 
+        # Result
         results_dict = {
             'prediction': int(prediction),
         }
         response.append(results_dict)
-
+        logging.info(json.dumps(response))
         return json.dumps(response)
 
     else:
         return func.HttpResponse(
-            "Please pass a properly formatted JSON object to the API",
+            "Error",
             status_code=400
         )

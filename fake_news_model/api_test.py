@@ -6,11 +6,12 @@ azure_url = "YOUR_AZURE_URL_PLUS_CODE"
 
 data = [
     {
-        'text': """Sample text here display to just inform its just fake""",
+        "url": "https://edition.cnn.com/2023/03/20/world/ipcc-synthesis-report-climate-intl/index.html",
     }
 ]
 
 r = requests.post(local_url, json=json.dumps(data))
+print(json.dumps(data))
 print(r)
 print(r.text)
 
