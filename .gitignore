@@ -4,6 +4,7 @@
 /fake_news_model_pipe.pkl
 /fake_news_model/fake_news_model_pipe.pkl
 /sem
+/isot
 # Created by https://www.toptal.com/developers/gitignore/api/pycharm,python,jupyternotebooks
 # Edit at https://www.toptal.com/developers/gitignore?templates=pycharm,python,jupyternotebooks
 
