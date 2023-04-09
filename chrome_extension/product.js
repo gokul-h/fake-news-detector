@@ -15,10 +15,10 @@ async function dosomething() {
     },
   };
   const result = await axios.post(azure_url, json);
-  if (result.data[0]["prediction"] == 1) {
+  if (result.data[0]["prediction"] == 0) {
     document.getElementById("response").innerHTML =
       "This news appears to be fake!";
-  } else if (result.data[0]["prediction"] == 0) {
+  } else if (result.data[0]["prediction"] == 1) {
     document.getElementById("response").innerHTML =
       "This news appears to be genuine!";
   } else {
